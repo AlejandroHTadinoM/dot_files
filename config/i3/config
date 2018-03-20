@@ -1,0 +1,356 @@
+# vim: filetype=i3
+# i3 config file (v1)
+
+###############################################################################
+# Set alias
+###############################################################################
+
+set $sup Mod4
+set $alt Mod1
+set $ctrl Ctrl
+set $urxvt urxvt -pe tabbed
+set $terminal xfce4-terminal
+set $psst --no-startup-id
+
+# ceeriously styled i3
+set $bg     2f343f
+set $fg     404552
+set $hi     fce94f
+set $ac     4084d6
+set $tx     2d323d
+set $ia     9e9e9e
+set $be     8faf9f
+set $yw     f8f893
+set $gn     81c181
+set $rd     bf9b76
+set $id     f9f8ff
+set $ce     ceecee
+set $sl     7f7f7f
+
+###############################################################################
+# Startup Applications
+###############################################################################
+
+# Set the Xresources color schemes by PyWal
+# exec_always $psst wal -i -n "$(< "${HOME}/.cache/wal/wal")" -t
+
+# Restore the Background IMG
+exec_always $psst feh --bg-scale ~/.config/i3/wallpaper.jpg
+
+# Launch Mopidy music player daemon at startup
+exec $psst mopidy
+
+# Compton compositor
+exec $psst compton -b --config ~/.config/compton/compton.conf
+
+# Network indicator applet
+exec $psst nm-applet
+
+# Telegram Desktop
+exec telegram
+
+###############################################################################
+# Command keybindings
+###############################################################################
+
+# start a terminal
+bindsym $sup+Return exec $terminal
+bindsym $sup+Shift+Return exec $terminal -e tmux
+
+# Rofi commnad laucher
+bindsym $sup+d exec $psst rofi -show drun
+
+# Run commnad
+bindsym $alt+F2 exec $psst rofi -show run
+
+# list open windows to switch to
+bindsym $alt+Tab exec rofi -show window
+
+# bind audio media keys to PulseAudio
+set $refresh_i3status killall -USR1 i3status
+bindsym $ctrl+$alt+Up exec pactl set-sink-volume @DEFAULT_SINK@ +5% && $refresh_i3status
+bindsym $ctrl+$alt+Down exec pactl set-sink-volume @DEFAULT_SINK@ -5% && $refresh_i3status
+bindsym XF86AudioMute exec pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status
+
+# Screenshot:
+bindsym $sup+$alt+s exec "scrot ~/Downloads/Screenshot%Y-%m-%d%H:%M:%S.png"
+
+# switch to next/prev workspace
+bindsym $sup+Right workspace next
+bindsym $sup+Left  workspace prev
+bindsym $sup+Up    workspace back_and_forth
+workspace_auto_back_and_forth yes
+bindsym $sup+Tab [urgent=latest] focus
+
+###############################################################################
+# Panel Configuration (i3bar)
+###############################################################################
+
+exec $psst polybar top
+# exec $psst polybar bottom
+
+###############################################################################
+# Window Management Keybindings
+###############################################################################
+
+# Font for window titles and the bar
+font pango:Ubuntu Bold 10
+
+# Use Mouse+$sup to drag floating windows to their wanted position
+floating_modifier $sup
+
+# kill focused window
+bindsym $sup+Shift+q kill
+
+# change focus
+bindsym $sup+h focus left
+bindsym $sup+j focus down
+bindsym $sup+k focus up
+bindsym $sup+l focus right
+
+# move focused window
+bindsym $sup+Shift+h move left
+bindsym $sup+Shift+j move down
+bindsym $sup+Shift+k move up
+bindsym $sup+Shift+l move right
+
+# split in horizontal orientation
+bindsym $sup+Shift+v split h
+
+# split in vertical orientation
+bindsym $sup+v split v
+
+# enter fullscreen mode for the focused container
+bindsym $sup+f fullscreen
+
+# change container layout (stacked, tabbed, toggle split)
+bindsym $sup+s layout stacking
+bindsym $sup+w layout tabbed
+bindsym $sup+e layout toggle split
+
+# toggle tiling / floating
+bindsym $sup+Shift+space floating toggle
+
+# change focus between tiling / floating windows
+bindsym $sup+space focus mode_toggle
+
+# focus the parent container
+bindsym $sup+a focus parent
+
+# set workspace alias
+set $ws1 "1: "
+set $ws2 "2:  "
+set $ws3 "3:  "
+set $ws4 "4:  "
+set $ws5 "5: "
+set $ws6 "6: "
+set $ws7 "7: "
+set $ws8 "8: "
+set $ws9 "9: "
+set $ws0 "0: "
+
+# switch to workspace
+bindsym $sup+1 workspace $ws1
+bindsym $sup+2 workspace $ws2
+bindsym $sup+3 workspace $ws3
+bindsym $sup+4 workspace $ws4
+bindsym $sup+5 workspace $ws5
+bindsym $sup+6 workspace $ws6
+bindsym $sup+7 workspace $ws7
+bindsym $sup+8 workspace $ws8
+bindsym $sup+9 workspace $ws9
+bindsym $sup+0 workspace $ws0
+
+# move focused container to workspace
+bindsym $sup+Shift+1 move container to workspace $ws1
+bindsym $sup+Shift+2 move container to workspace $ws2
+bindsym $sup+Shift+3 move container to workspace $ws3
+bindsym $sup+Shift+4 move container to workspace $ws4
+bindsym $sup+Shift+5 move container to workspace $ws5
+bindsym $sup+Shift+6 move container to workspace $ws6
+bindsym $sup+Shift+7 move container to workspace $ws7
+bindsym $sup+Shift+8 move container to workspace $ws8
+bindsym $sup+Shift+9 move container to workspace $ws9
+bindsym $sup+Shift+0 move container to workspace $ws0
+
+# reload the configuration file
+bindsym $sup+Shift+c reload
+
+# restart i3 inplace (preserves your layout/session, can be used to upgrade i3)
+bindsym $sup+Shift+r restart
+
+# exit i3 (logs you out of your X session)
+# bindsym $sup+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
+
+###############################################################################
+# Resize menu
+###############################################################################
+
+# resize window (you can also use the mouse for that)
+set $mode_resize 
+
+bindsym $sup+r mode "$mode_resize"
+
+mode "$mode_resize" {
+    # Pressing left will shrink the window’s width.
+    # Pressing right will grow the window’s width.
+    # Pressing up will shrink the window’s height.
+    # Pressing down will grow the window’s height.
+    bindsym h resize shrink width 10 px or 10 ppt
+    bindsym j resize grow height 10 px or 10 ppt
+    bindsym k resize shrink height 10 px or 10 ppt
+    bindsym l resize grow width 10 px or 10 ppt
+
+    # same bindings, but for the arrow keys
+    bindsym Left resize shrink width 10 px or 10 ppt
+    bindsym Down resize grow height 10 px or 10 ppt
+    bindsym Up resize shrink height 10 px or 10 ppt
+    bindsym Right resize grow width 10 px or 10 ppt
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+###############################################################################
+# Gaps menu
+###############################################################################
+
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $sup+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+###############################################################################
+# Window Borders Decorators
+###############################################################################
+
+# set some nice colors      border  background  text    indicator
+client.focused              $ac     $ac         $tx     $id
+client.unfocused            $bg     $bg         $ia     $id
+client.focused_inactive     $bg     $bg         $ac     $id
+client.urgent               $ac     $ac         $tx     $id
+#border & indicator are ignored
+client.placeholder          $bg     $bg         $bg     $bg
+
+###############################################################################
+# Set Windows Defaults
+###############################################################################
+
+# fix graphics glitch
+new_window none
+
+for_window [window_role="pop-up"] floating enable
+for_window [window_role="bubble"] floating enable
+for_window [window_role="task_dialog"] floating enable
+for_window [window_role="Preferences"] floating enable
+
+for_window [window_type="dialog"] floating enable
+for_window [window_type="menu"] floating enable
+
+for_window [class="(?i)gsimplecal"] floating enable, move position mouse, move down $height px
+for_window [class="(?i)qemu-system"] floating enable
+for_window [class="(?i)VirtualBox" title="(?i)Manager"] floating enable
+for_window [class="(?i)VirtualBox"] floating enable
+for_window [class="(?i)blueman"] floating enable
+for_window [class="(?i)pinentry"] floating enable
+
+#for_window [instance="sun-awt-X11-XFramePeer"] floating enable
+for_window [instance="__scratchpad"] floating enable
+for_window [instance="__nmtui"] floating enable
+
+for_window [class="TelegramDesktop"] floating enable
+
+###############################################################################
+# Scratchpads
+###############################################################################
+
+exec $psst $terminal -T "Music" -e ncmpcpp
+for_window [title="Music"] floating enable
+for_window [title="Music"] move scratchpad
+bindsym $sup+Shift+m [title="Music"] scratchpad show
+
+exec $psst $terminal -T "Genius" -e genius
+for_window [title="Genius"] floating enable
+for_window [title="Genius"] move scratchpad
+bindsym $sup+Shift+p [title="Genius"] scratchpad show
+
+exec $psst $terminal -T "Quick Notes" -e vim --geometry 80x40
+for_window [title="Quick Notes"] floating enable
+for_window [title="Quick Notes"] move scratchpad
+bindsym $sup+Shift+n [title="Quick Notes"] scratchpad show
+
+exec $psst $terminal -T "Files" -e ranger --geometry 120x40
+for_window [title="Files"] floating enable
+for_window [title="Files"] move scratchpad
+bindsym $sup+Shift+f [title="Files"] scratchpad show
+
+exec $psst $terminal -T "Mail" -e mutt
+for_window [title="Mail"] floating enable
+for_window [title="Mail"] move scratchpad
+bindsym $sup+Shift+e [title="Mail"] scratchpad show
+
+for_window [title="Telegram"] floating enable
+for_window [title="Telegram"] move scratchpad
+bindsym $sup+Shift+t [title="Telegram"] scratchpad show
+
+
+###############################################################################
+# System Logout
+###############################################################################
+
+set $mode_system    [L]OCK       LOG[O]UT       [S]USPEND       [R]EBOOT       [P]OWEROFF
+
+bindsym $alt+Delete mode "$mode_system"
+bindsym $ctrl+$alt+BackSpace mode "$mode_system"
+
+mode "$mode_system" {
+    bindsym l exec $psst ~/.config/i3/i3exit.sh lock, mode "default"
+    bindsym o exec $psst ~/.config/i3/i3exit.sh logout, mode "default"
+    bindsym s exec $psst ~/.config/i3/i3exit.sh suspend, mode "default"
+    bindsym r exec $psst ~/.config/i3/i3exit.sh reboot, mode "default"
+    bindsym p exec $psst ~/.config/i3/i3exit.sh poweroff, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+###############################################################################
+# Applications shortcuts
+###############################################################################
+
+bindsym $sup+Shift+w exec exo-open http://
